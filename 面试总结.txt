@@ -1,0 +1,153 @@
+7.30 下午 13：30    地点：中博大厦 1008   笔试和面试
+不足：
+1、笔试中熟悉的代码写不出来
+2、let在某种情况下可以变量提升  即同时存在var时   即先用var声明 然后console  然后再用let声明  此时就会报错
+3、promise的使用是为了解决回调地狱
+4、css中!import的优先级  没有min-width的优先级高
+5、promise中的async概念 需要了解
+6、如何设置浏览器缓存的有效时间
+7、浏览器的回流和重绘 需要了解
+8、promise.all
+9、sort（） 排序的使用   传入比较器  其中也可以对数组中嵌套的对象使用比较器实现基于 [{id:0,..}, {id:1,...}]
+10、vue兄弟组件的通信    使用事件主线 $evetBus
+
+
+7.30 下午16：00   中软 电话面试
+1、vue的生命周期  加载过程
+2、vue的单向数据流和双向数据绑定的原理和区别
+     单向数据流：父级 prop 的更新会向下流动到子组件中，每次父级组件发生更新时，子组件中所有的 prop 都将会刷新 为最新的值
+    双向数据绑定：vue的双向绑定是由数据劫持结合发布者－订阅者模式实现的
+	           vue通过Object.defineProperty()进行数据劫持
+	           双向数据绑定：view变化更新data-可通过事件监听，当触发事件时修改data
+			   data变化更新view  在Object.defineProperty()中设置其set，将view的更新写在set中，			   当修改data时，就会触发set中设置的view更新
+3、箭头函数和fun的区别：箭头函数会自动捕获并绑定上下文所在的this，使用call、apply、bind不能修改this
+	                        箭头函数不能成为构造函数，即不能用new
+	   	        箭头函数不能绑定arguments，使用es6 的展开式赋值
+		       箭头函数没有原型属性  即 其prototype为undefined
+		       箭头函数不能成为Generator函数，不能使用yield关键字
+4、数组的方法：
+arr.map()   使用：let newArr = arr.map(x => x*2)   接受一个回调，回调中自动调用数组元素   需要return一个新值  此方法是将数组中的每个元素调用一个提供的函数，结果作为一个新的数组返回，并没有改变原来的数组  非变异
+arr.forEach()  使用：let arr = [1, 2, 3, 4, 5]   arr.forEach(x => x*2)   将数组中的每个元素执行传进提供的函数，没有返回值，专门用来循环数组的  不需要提供返回值 此方法不会返回值  即forEach()返回值是undefined，不可以链式调用
+没有办法终止或者跳出forEach()循环，除非抛出异常，所以想执行一个数组是否满足什么条件，返回布尔值，可以用一般的for循环实现，或者用Array.every()或者Array.some();
+$.each()方法规定为每个匹配元素规定运行的函数，可以返回 false 可用于及早停止循环
+arr.filter()    此方法是将所有元素进行判断，将满足条件的元素作为一个新的数组返回   回调需要return   返回一个新数组  不会修改原数组  非变异
+arr.every()  此方法是将所有元素进行判断返回一个布尔值，如果所有元素都满足判断条件，则返回true，否则为false：
+arr.some()  此方法是将所有元素进行判断返回一个布尔值，如果存在元素都满足判断条件，则返回true，若所有元素都不满足判断条件，则返回false：
+arr.reduce()  此方法是所有元素调用返回函数，返回值为最后结果,传入的值必须是函数类型：实现累加
+Array.reduceRight() 方法，区别是这个是从右向左操作的
+arr.push()  末尾添加 返回数组长度
+arr.pop()    末尾删除  返回删除的元素
+arr.shift()  开始删除 返回删除的元素
+arr.unshift()   开始添加  返回数组长度
+
+Array.isArray( arr )  判断是不是数组，返回布尔值
+
+arr.concat()  合并数组，返回新数组 不改变原数组  非变异
+arr.toString()  将数组转为字符串
+arr.join()  将数组转为字符串  可以指定各元素直接的连接符
+arr.splice( start, 删除个数, 新元素 )  万能方法  可实现增删改   会改变原数组  变异方法
+arr.reverse()   颠倒数组  反转  会改变原数组 
+
+arr.slice( start, end )  切割数组  返回新数组 不会修改原数组
+
+arr.sort()  数组排序 如果要实现数字大小排序 需要传入比较器   会修改原数组
+function sortNumber(a,b)
+	{
+		return a - b
+	}
+arr.sort(sortNumber)    // 实现从大到小排序  反过来就是从小到大
+
+str.indexOf()   可返回某个指定的字符串值在整个字符串中首次出现的位置    indexOf()  是属于字符串的方法  Number没有此方法 需要转成string    数组同样有indexOf()  方法  比较使用的是严格等于    
+
+判断是否为数组  Array.isArray( arr )   或者 看对象的构造属性  obj.constructor === Array
+
+实现深拷贝 es6 展开式 和 Object.assgin()  需要递归    使用es5里面的JSON.parse(） 和 JSON.stringify
+
+获取对象中的键名  Object.keys(obj)  返回键名组成的数组 此时为可枚举的属性的键名
+Object.entries( obj )  返回一个数组 每一项就是一个两个元素的键值对数组
+Object.values(obj)
+
+5、vue的生命周期：
+beforeCreate
+created
+beforeMount
+mounted
+beforeUpdate
+updated
+beforeDestroy
+destroyed
+
+1. 在beforeCreate和created钩子函数之间的生命周期
+在这个生命周期之间，进行初始化事件，进行数据的观测，可以看到在created的时候数据已经和data属性进行绑定（放在data中的属性当值发生改变的同时，视图也会改变）。此时还没挂载 即this.$el    undefined
+2、created钩子函数和beforeMount间的生命周期   
+首先会判断对象是否有el选项。如果有的话就继续向下编译，如果没有el选项，则停止编译，也就意味着停止了生命周期，直到在该vue实例上调用vm.$mount(el)。渲染优先级所以综合排名优先级：
+render函数选项 > template选项 > outer HTML
+3. beforeMount和mounted 钩子函数间的生命周期
+此时是给vue实例对象添加$el成员，并且替换掉挂在的DOM元素。因为在之前console中打印的结果可以看到beforeMount之前el上还是undefined。
+4、mounted
+在mounted之前h1中还是通过{{message}}进行占位的，因为此时还有挂在到页面上，还是JavaScript中的虚拟DOM形式存在的。在mounted之后可以看到h1中的内容发生了变化。
+在mounted之前 dom中通过双括号占位 此时数据还存在虚拟dom中，但mounted之后变量渲染到dom上
+5. beforeUpdate钩子函数和updated钩子函数间的生命周期
+当vue发现data中的数据发生了改变，会触发对应组件的重新渲染，先后调用beforeUpdate和updated钩子函数
+前面的初始化和挂载都不会触发了
+6.beforeDestroy和destroyed钩子函数间的生命周期
+beforeDestroy钩子函数在实例销毁之前调用。在这一步，实例仍然完全可用。
+destroyed钩子函数在Vue 实例销毁后调用。调用后，Vue 实例指示的所有东西都会解绑定，所有的事件监听器会被移除，所有的子实例也会被销毁。
+
+智链数据有限公司
+1、获取对象属性和方法的方法  点语法和[]   其中点语法用于静态的属性和方法的获取   [] 的方式可以支持动态的传入一个变量，但此方式不能访问对象中的方法
+2、css实现DIV水平垂直居中的方式
+3、移动端1px的问题
+4、移动端input中的placehold的兼容   好像使用伪类  -webkit-input-placehold可以修改placehold的样式
+5、input框实现将光标显示在最右边，可以从右向左输入    设置样式  text-align:center
+6、flex布局
+7、函数的重载   传入不同的参数实现不同的功能   通过arguments实现
+8、Vue的路由守卫  全局守卫的配置和使用场景    路由切换刷新会导致参数的丢失
+9、vuex状态管理，结合浏览器缓存实现页面刷新时状态的保存
+10、跨域问题、前端页面的性能优化
+
+海康面试：
+vue 中 v-model的实现原理
+组件的封装
+vuex的原理、使用场景、vuex和事件主线、父子通信之间的对比
+vue中路由加载的性能优化   路由懒加载
+wacth和计算属性的对比
+数组的双向绑定和对象中的数据劫持（setter） 一样的吗？  vue怎么实现对数组的双向绑定的？   这个不懂~~
+
+同花顺：
+怎样解决css中的塌陷问题？ 
+怎样用less抽离设置全局的样式？  这个没太理解 就过了
+promise.all  和 链式的回调区间   
+es6中解构赋值底层是使用es5的什么api实现的    
+vue一般在哪个生命周期写ajax请求？  created里，如果写在mounted中可能有时会导致初次显示白屏
+vue中应该怎么使用echart？ 因为echart需要指定DOM元素，所以可以写在mounted中，mounted中vue实现了DOM的渲染  但还需要写在$nextTick方法的回调里 保证页面DOM加载完成后   
+vue中有没有遇到动态的修改url的路径：绑定一个相对路径 然后动态修改  有时图片会找不到?    这个不知道
+
+其他： 
+1、有问到要介绍  面向对象的     封装 继承 多态
+2、es6 语法  然后会问箭头函数和一般函数的区别  还要promise对象  出现的原因就是通过链式调用，解决回调地狱   接着就会问promise.all  、async、await
+3、css 基本上就是DIV垂直水平居中的实现  flex   双飞翼布局也有问过  css中min-width和!important的优先级 （min-width的优先级高）、less的使用
+4、dom事件触发的几个阶段   
+5、事件委托  这个 有两家都有结合vue问：v-for循环li列表   那么每个li的点击事件可以直接写在li上吗  或者能用其他优化的方式实现 每个li的点击事件    这个一直没回答出来~~  不知道有啥坑
+6、vue项目的结构目录
+7、axios的请求的拦截设置和相应的使用场景
+8、1/0   这个返回什么  infinty  无穷
+9、深浅拷贝  实现的方式  ES5的JSON.parse JSON.stringify    ES6的spread(...)展开式    Object.assgin()
+10、Vue中数组的变异方法和非变异方法
+11、数组和对象的联系   我理解的对象就是一个hash数组
+12、数组去重的实现  ES6的一个简单方式 将数组传入 new Set()    
+13、vue路由传参的实现方式和相应的特点
+14、vant组件库在移动端遇到的适配和兼容问题
+15、Vue组件中的style里面scoped可以将该组件的样式设置为不影响其他组件  这个是怎么实现的？
+16、vue的diff算法
+17、对nodeJs的认识  就一家问到  就是单线程 会有一个事件队列 记录需要添加的事件 在主线程完成后  通过循环的方式查询事件队列 然后触发相应的回调
+18、js中类似let的块级作用域有哪些   这个不是很了解  当时说出一个 try-catch   
+19、with  延长作用域链的概念 问有没有了解
+20、vue中组件销毁的使用场景
+21、路由跳转是会不会触发mounted  复用的路由组件跳转不会触发mounted钩子  可使用watch监听路由对象或者使用组件内的路由守卫beforeRouteUpdate实现视图的更新，
+	 next()中可以传入重定向的路径，或者使用false  在路由跳转的守卫钩子beforeRouteLeave（to,from,next）里保证用户没有保存信息时取消路由的跳转
+22、js实现冒泡排序  两层循环  内层循环两两比较大小  外层循环控制从第一个元素开始一遍遍的比较
+23、css的盒子模型、清除浮动
+24、for...in  和 for...of 循环的区别
+
+

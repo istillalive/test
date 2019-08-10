@@ -1,0 +1,153 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,user-scalable=no" />
+<title>无标题文档</title>
+<style>
+body {
+	margin: 0;
+}
+body,
+html {
+	height: 100%;
+	overflow: hidden;
+}
+#wrap {
+	height: 100%;
+	overflow: hidden;
+	position: relative;
+}
+</style>
+<script src="js/transform.js"></script>
+<script>
+document.addEventListener(
+	"touchstart",
+	function(e) {
+		e.preventDefault();
+	}
+);
+function setInner() {
+	var scroll = document.querySelector("#scroll");
+	var inner = "";
+	for(var i = 0; i < 300; i++){
+		inner += "移动端事件交互 -- 讲师：莫涛"+i+"<br/>";
+	}
+	scroll.innerHTML = inner;
+}
+window.onload = function() {
+	setInner();
+	var wrap  = document.querySelector("#wrap");
+	mscroll(wrap);
+};
+function mscroll(wrap) {
+	var child = wrap.children[0]; 
+	var startPoint = 0;
+	var startY = 0;
+	var minY = wrap.clientHeight - child.offsetHeight;
+	var step = 1;
+	var lastY = 0; 
+	var lastTime = 0;
+	var lastDis = 0;
+	var lastTimeDis = 1;
+	var Tween = {
+		easeOut: function(t, b, c, d){
+			return -c * ((t=t/d-1)*t*t*t - 1) + b;
+		},
+		backOut: function(t, b, c, d, s){
+			if (typeof s == 'undefined') {
+				s = 1.70158;  
+			}
+			return c*((t=t/d-1)*t*((s+1)*t + s) + 1) + b;
+		} 
+	};
+	cssTransform(child,"translateZ",0.01);
+	wrap.addEventListener(
+		'touchstart', 
+		function(e) {
+			//child.style.transition = "none";
+			clearInterval(child.scroll);
+			startPoint = e.changedTouches[0].pageY;
+			startY = cssTransform(child,"translateY");
+			step = 1;
+			lastY = startPoint;
+			lastTime = new Date().getTime();
+			lastDis = 0;
+			lastTimeDis = 1;
+		}
+	);
+	wrap.addEventListener(
+		'touchmove', 
+		function(e) {
+			var nowPoint = e.changedTouches[0].pageY;
+			var dis = nowPoint - startPoint;
+			var t = startY + dis;
+			var nowTime = new Date().getTime();
+			if(t > 0) {
+				step = 1-t / wrap.clientHeight; 
+				t = parseInt(t*step);
+			}
+			if(t < minY) {
+				var over = minY - t; 
+				step = 1-over / wrap.clientHeight;
+				over = parseInt(over*step);
+				t = minY - over;
+			}
+			lastDis = nowPoint - lastY; 
+			lastTimeDis = nowTime - lastTime; 
+			lastY = nowPoint;
+			lastTime = nowTime;
+			cssTransform(child,"translateY",t);
+		}
+	);
+	wrap.addEventListener(
+		'touchend', 
+		function (){
+			var speed = (lastDis/lastTimeDis)*120; 
+			var t = cssTransform(child,"translateY");
+			var target = t + speed; 
+			//var type = "cubic-bezier(.34,.92,.58,.9)";
+			var type = "easeOut";
+			var time = Math.abs(speed*10);
+			time = time<300?300:time;
+			if(target > 0) {
+				target = 0;
+				type ="backOut";
+			}
+			if(target < minY) {
+				target = minY;
+				type ="backOut";
+			}
+			move(target,time,type);
+			//child.style.transition = time+"ms " + type;
+			//cssTransform(child,"translateY",target);
+		}
+	);
+	function move(target,time,type) {
+		var t = 0;
+		var b = cssTransform(child,"translateY");
+		var c = target - b;
+		var d = Math.ceil(time/20);
+		clearInterval(child.scroll);
+		child.scroll = setInterval(
+			function() {
+				t++;
+				if(t > d) {
+					clearInterval(child.scroll);
+				} else {
+					var top = Tween[type](t,b,c,d);
+					cssTransform(child,"translateY",top);
+
+				}
+			},20
+		);
+	}
+}
+</script>
+</head>
+<body>
+<div id="wrap">
+	<div id="scroll"></div>
+</div>
+</body>
+</html>
